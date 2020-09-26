@@ -7,16 +7,16 @@
 * Reference: https://ww2.mathworks.cn/help/matlab/matlab_external/c-mex-source-file.html
 *******************************************************/
 
-#include <string>
-#include "../source/parser/inspector.h"
-#define VRP_EXPORT __declspec(dllexport)
-#define VRP_FUNEXP __cdecl
-
+#define DLLEXPORT __declspec(dllexport)
+#define DLLFUNEXP __cdecl
+#define MAX_LINE_LENGTH 1000
 #ifdef __cplusplus
 extern "C" {
 #endif
-		VRP_EXPORT int VRP_FUNEXP getData();
-        VRP_EXPORT inspector* VRP_FUNEXP getInspector(const std::string& name, const std::string& file);
+DLLEXPORT void DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFile);
+DLLEXPORT void DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* outFile);
+DLLEXPORT void DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile);
+DLLEXPORT void DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* outDir);
 #ifdef __cplusplus
 }
 #endif
