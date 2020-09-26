@@ -1,8 +1,9 @@
 #include <iostream>
-#include "parser.h"
+#include "parser/ParserBase.h"
+#include "parser/inspector.h"
 
 int main()
 {
-    parser p;
-    std::cout << p.getData() << std::endl;
+	EegInspector ins("E:\\Haozaijun\\ExperimentData\\1\\eeg.bin");
+	ins.translateToBrainVision("E:\\Haozaijun\\test.eeg");
 }

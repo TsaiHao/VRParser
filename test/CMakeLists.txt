@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(VRPTEST)
-aux_source_directory(./source SRC_DIR)
-add_executable(${PROJECT_NAME} ${SRC_DIR})
+aux_source_directory(./source TEST_SRC_DIR)
+add_executable(${PROJECT_NAME} ${TEST_SRC_DIR})
 target_include_directories(${PROJECT_NAME}
         PUBLIC ${PROJECT_SOURCE_DIR}/include
-        PUBLIC )
+        PUBLIC ${SRC_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/../parser/source/)
 target_link_libraries(${PROJECT_NAME}
         parser)

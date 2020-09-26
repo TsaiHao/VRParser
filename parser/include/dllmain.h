@@ -7,6 +7,8 @@
 * Reference: https://ww2.mathworks.cn/help/matlab/matlab_external/c-mex-source-file.html
 *******************************************************/
 
+#include <string>
+#include "../source/parser/inspector.h"
 #define VRP_EXPORT __declspec(dllexport)
 #define VRP_FUNEXP __cdecl
 
@@ -14,7 +16,7 @@
 extern "C" {
 #endif
 		VRP_EXPORT int VRP_FUNEXP getData();
-
+        VRP_EXPORT inspector* VRP_FUNEXP getInspector(const std::string& name, const std::string& file);
 #ifdef __cplusplus
 }
 #endif
