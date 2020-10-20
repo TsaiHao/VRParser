@@ -1,10 +1,12 @@
 ﻿#include <fstream>
 #include <regex>
 #include <unordered_map>
-#include "boost/filesystem.hpp"
 #include "dllmain.h"
+#include "utils/utils.h"
 
 using namespace std;
+using namespace VrParser;
+
 #define EEGHEADSIZE 12
 struct EegBlock
 {
@@ -83,8 +85,11 @@ inline string concatPath(const string& p1, const string& p2)
 DLLEXPORT void DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* outDir)
 {
     //TODO: 各文件名改为和outDir的最后一节相同
-    using namespace boost::filesystem;
-    create_directories(outDir);
+    auto& utils = Utils::instance();
+    int res = utils->createDirectory(outDir);
+    if (res < 0) {
+        return;
+    }
     vrEegToBrainVision(concatPath(inDir, "eeg.bin").c_str(), concatPath(outDir, "EegData.eeg").c_str());
     vrMarkerToBrainVision(concatPath(inDir, "marker.txt").c_str(), concatPath(outDir, "EegMarker.vmrk").c_str());
     vrEegWriteBrainVisionHeader(concatPath(outDir, "EegHeader.vhdr").c_str());
