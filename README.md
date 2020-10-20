@@ -17,8 +17,6 @@
 此文件夹下存放测试`parser`的代码。可选择编译。
 
 ## 依赖
-`Boost (minimum 1.71.0)`
-
 `CMake (minimum 3.12.0)`
 
 `Visual Studio 2019`
