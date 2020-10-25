@@ -8,6 +8,7 @@ using namespace std;
 using namespace VrParser;
 
 #define EEGHEADSIZE 12
+// A single eeg data block contains 3 long-type header and 350 float-type eeg data
 struct EegBlock
 {
     long head[3];
@@ -94,3 +95,4 @@ DLLEXPORT void DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* 
     vrMarkerToBrainVision(concatPath(inDir, "marker.txt").c_str(), concatPath(outDir, "EegMarker.vmrk").c_str());
     vrEegWriteBrainVisionHeader(concatPath(outDir, "EegHeader.vhdr").c_str());
 }
+

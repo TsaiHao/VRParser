@@ -7,8 +7,14 @@
 * Reference: https://ww2.mathworks.cn/help/matlab/matlab_external/c-mex-source-file.html
 *******************************************************/
 
+#ifdef _WIN32
 #define DLLEXPORT __declspec(dllexport)
 #define DLLFUNEXP __cdecl
+#else 
+#define DLLEXPORT __attribute__((visibility("default")))
+#define DLLFUNEXP 
+#endif
+
 #define MAX_LINE_LENGTH 1000
 #ifdef __cplusplus
 extern "C" {
