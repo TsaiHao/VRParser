@@ -12,3 +12,12 @@ target_include_directories( ${PROJECT_NAME}
         PUBLIC ${PROJECT_SOURCE_DIR}/include
         )
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD        
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+    $<TARGET_FILE:parserlib> ${PROJECT_SOURCE_DIR}/wrappers/matlab/
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+    ${PROJECT_SOURCE_DIR}/include/dllmain.h ${PROJECT_SOURCE_DIR}/wrappers/matlab/
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different 
+    $<TARGET_FILE:parserlib> ${PROJECT_SOURCE_DIR}/wrappers/python/    
+    )
