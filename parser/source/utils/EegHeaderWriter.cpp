@@ -2,7 +2,7 @@
 #include "dllmain.h"
 using namespace std;
 
-DLLEXPORT void DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile)
+DLLEXPORT int DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile)
 {
     const char* text = R"(Brain Vision Data Exchange Header File Version 1.0
 ; Data created by the Vision Recorder
@@ -170,6 +170,10 @@ Ref:          0
 )";
 
     ofstream ofs(outFile);
+    if (!ofs) {
+        return -1;
+    }
     ofs << text;
     ofs.close();
+    return 1;
 }

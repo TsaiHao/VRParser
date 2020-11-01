@@ -19,10 +19,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-DLLEXPORT void DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFile);
-DLLEXPORT void DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* outFile);
-DLLEXPORT void DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile);
-DLLEXPORT void DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* outDir);
+DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFile);
+DLLEXPORT int DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* outFile);
+DLLEXPORT int DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile);
+DLLEXPORT int DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* outDir);
 #ifdef __cplusplus
 }
 #endif

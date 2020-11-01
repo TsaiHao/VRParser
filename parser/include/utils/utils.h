@@ -15,7 +15,7 @@ namespace VrParser
             }
             return _inst;
         }
-
+        bool exists(const std::string& p) const;
         int createDirectory(const std::string& file) const;
     private:
         Utils() = default;

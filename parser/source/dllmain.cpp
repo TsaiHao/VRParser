@@ -15,13 +15,13 @@ struct EegBlock
     float data[350];
 };
 
-DLLEXPORT void DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFile)
+DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFile)
 {
     ofstream ofs(outFile, ios_base::out | ios_base::binary);
     ifstream ifs(inFile, ios_base::in | ios_base::binary);
 
     if (!ofs.is_open() || !ifs.is_open()) {
-        return;
+        return -1;
     }
     EegBlock b;
     size_t readSize = sizeof(b);
@@ -32,12 +32,16 @@ DLLEXPORT void DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outF
     }
     ifs.close();
     ofs.close();
+    return 0;
 }
 
-DLLEXPORT void DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* outFile)
+DLLEXPORT int DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* outFile)
 {
     ifstream ifs(inFile, ios_base::in);
     ofstream ofs(outFile);
+    if (!ifs || !ofs) {
+        return -1;
+    }
     regex name("^(\\w+\\b )?(\\w+):\\W?$");
     regex marker("^EEG marker = (\\d+)\\W?$");
     char line[MAX_LINE_LENGTH];
@@ -73,6 +77,7 @@ DLLEXPORT void DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* o
     }
     ifs.close();
     ofs.close();
+    return 0;
 }
 
 inline string concatPath(const string& p1, const string& p2)
@@ -83,16 +88,20 @@ inline string concatPath(const string& p1, const string& p2)
     return p1 + "\\" + p2;
 }
 
-DLLEXPORT void DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* outDir)
+DLLEXPORT int DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* outDir)
 {
     //TODO: 各文件名改为和outDir的最后一节相同
     auto& utils = Utils::instance();
+    if (utils -> exists(inDir)) {
+        return -1;
+    }
     int res = utils->createDirectory(outDir);
     if (res < 0) {
-        return;
+        return -1;
     }
     vrEegToBrainVision(concatPath(inDir, "eeg.bin").c_str(), concatPath(outDir, "EegData.eeg").c_str());
     vrMarkerToBrainVision(concatPath(inDir, "marker.txt").c_str(), concatPath(outDir, "EegMarker.vmrk").c_str());
     vrEegWriteBrainVisionHeader(concatPath(outDir, "EegHeader.vhdr").c_str());
+    return 1;
 }
 
