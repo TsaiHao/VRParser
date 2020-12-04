@@ -11,7 +11,7 @@
 #define DLLEXPORT __declspec(dllexport)
 #define DLLFUNEXP __cdecl
 #else 
-#define DLLEXPORT __attribute__((visibility("default")))
+#define DLLEXPORT 
 #define DLLFUNEXP 
 #endif
 
@@ -23,6 +23,7 @@ DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFi
 DLLEXPORT int DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* outFile);
 DLLEXPORT int DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile);
 DLLEXPORT int DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* outDir);
+DLLEXPORT float* DLLFUNEXP vrEmgReadToArray(const char* inFile);
 #ifdef __cplusplus
 }
 #endif
