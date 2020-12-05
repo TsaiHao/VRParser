@@ -1,16 +1,20 @@
-function [Data] = ReadPlainFloatToArray(InputFile, channels)
-% Read input emg file to Emg array
-% assuming channel is 16 and datatype is float
+function [Data] = ReadPlainFloatToArray(InputFile, DataType)
+% Read FT data : ft = ReadPlainFloatToArray('feet.ftdata', 'FT');
+% Read Emg data : emg = ReadPlainFloatToArray('emg.bin', 'Emg');
 
 f = fopen(InputFile);
-bytes = fread(f, Inf, 'char');
-len = floor(length(bytes) / 4);
-row = floor(len / channels);
+if strcmp(DataType, 'FT')
+    chans = 6;
+    tp = 'double';
+elseif strcmp(DataType, 'Emg')
+    chans = 16;
+    tp = 'single';
+else
+    return;
+end
+data = fread(f, Inf, tp);
+cols = floor(length(data) / chans);
+Data = reshape(data(1: cols * chans), chans, cols);
 fclose(f);
-clear bytes
-
-f = fopen(InputFile);
-data = fread(f, len, 'single');
-Data = reshape(data, channels, row);
 end
 
