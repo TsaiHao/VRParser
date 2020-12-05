@@ -1,52 +1,30 @@
+#include <string>
+#include <sstream>
+#include <vector>
+#include <memory>
+
 #include "mex.hpp"
 #include "mexAdapter.hpp"
 
+#include "dllmain.h"
+
+using matlab::mex::ArgumentList;
+using namespace matlab::data;
+using namespace std;
 class MexFunction : public matlab::mex::Function {
+    shared_ptr<matlab::engine::MATLABEngine> matlabPtr = getEngine();
+    ArrayFactory factory;
+
 public:
     void operator()(matlab::mex::ArgumentList outputs, matlab::mex::ArgumentList inputs) {
-        checkArguments(outputs, inputs);
-        double multiplier = inputs[0][0];
-        matlab::data::TypedArray<double> in = std::move(inputs[1]);
-        arrayProduct(in, multiplier);
-        outputs[0] = std::move(in);
-    }
-
-    void arrayProduct(matlab::data::TypedArray<double>& inMatrix, double multiplier) {
-
-        for (auto& elem : inMatrix) {
-            elem *= multiplier;
-        }
-    }
-
-    void checkArguments(matlab::mex::ArgumentList outputs, matlab::mex::ArgumentList inputs) {
-        std::shared_ptr<matlab::engine::MATLABEngine> matlabPtr = getEngine();
-        matlab::data::ArrayFactory factory;
-
-        if (inputs.size() != 2) {
-            matlabPtr->feval(u"error",
-                             0, std::vector<matlab::data::Array>({ factory.createScalar("Two inputs required") }));
-        }
-
-        if (inputs[0].getNumberOfElements() != 1) {
-            matlabPtr->feval(u"error",
-                             0, std::vector<matlab::data::Array>({ factory.createScalar("Input multiplier must be a scalar") }));
-        }
-
-        if (inputs[0].getType() != matlab::data::ArrayType::DOUBLE ||
-            inputs[0].getType() == matlab::data::ArrayType::COMPLEX_DOUBLE) {
-            matlabPtr->feval(u"error",
-                             0, std::vector<matlab::data::Array>({ factory.createScalar("Input multiplier must be a noncomplex scalar double") }));
-        }
-
-        if (inputs[1].getType() != matlab::data::ArrayType::DOUBLE ||
-            inputs[1].getType() == matlab::data::ArrayType::COMPLEX_DOUBLE) {
-            matlabPtr->feval(u"error",
-                             0, std::vector<matlab::data::Array>({ factory.createScalar("Input matrix must be type double") }));
-        }
-
-        if (inputs[1].getDimensions().size() != 2) {
-            matlabPtr->feval(u"error",
-                             0, std::vector<matlab::data::Array>({ factory.createScalar("Input must be m-by-n dimension") }));
-        }
+        int size = 0;
+        const char* path = "/home/zaijun/Research/vr/data/7/on/2/emg.bin";
+        float* data = vrEmgReadToArray(path, &size);
+        //vector<float> emg(data, data + size);
+        TypedArray<float> ret = factory.createArray<float>(
+                {1, static_cast<unsigned long>(size)},
+                data,
+                data + size);
+        outputs[0] = std::move(ret);
     }
 };

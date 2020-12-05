@@ -23,7 +23,7 @@ DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFi
 DLLEXPORT int DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* outFile);
 DLLEXPORT int DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile);
 DLLEXPORT int DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* outDir);
-DLLEXPORT float* DLLFUNEXP vrEmgReadToArray(const char* inFile);
+DLLEXPORT float* DLLFUNEXP vrEmgReadToArray(const char* inFile, int* size);
 #ifdef __cplusplus
 }
 #endif

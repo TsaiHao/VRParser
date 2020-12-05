@@ -105,7 +105,7 @@ DLLEXPORT int DLLFUNEXP vrEegConvertAllInFolder(const char* inDir, const char* o
     return 1;
 }
 
-float* vrEmgReadToArray(const char *inFile) {
+float* vrEmgReadToArray(const char *inFile, int* size) {
     ifstream ifs(inFile, ios::in | ios::binary);
     const int CHANNELS = 16;
     if (!ifs) {
@@ -121,5 +121,6 @@ float* vrEmgReadToArray(const char *inFile) {
     }
     float* ret = new float[serial.size() * sizeof(float)];
     uninitialized_copy(serial.begin(), serial.end(), ret);
+    *size = serial.size();
     return ret;
 }
