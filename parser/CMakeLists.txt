@@ -12,4 +12,3 @@ add_library(${PARSER_LIB} SHARED ${SRC_DIR} ${UTILITY_SRC_DIR})
 include_directories(
         ${PROJECT_SOURCE_DIR}/include
         )
-set_property(TARGET ${PARSER_LIB} PROPERTY CXX_STANDARD 17)
