@@ -3,6 +3,10 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
 namespace VrParser
 {
     class Utils {
@@ -17,6 +21,9 @@ namespace VrParser
         }
         bool exists(const std::string& p) const;
         int createDirectory(const std::string& file) const;
+        int readFileToBuffer(const std::string& file, std::string& content) const;
+        std::vector<std::string> readFileLines(const std::string& file) const;
+
     private:
         Utils() = default;
     };
