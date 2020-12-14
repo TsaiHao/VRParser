@@ -3,12 +3,13 @@ function [Data] = ReadPlainFloatToArray(InputFile, DataType)
 % Read Emg data : emg = ReadPlainFloatToArray('emg.bin', 'Emg');
 
 f = fopen(InputFile);
+tp = 'single';
 if strcmp(DataType, 'FT')
     chans = 6;
-    tp = 'double';
 elseif strcmp(DataType, 'Emg')
     chans = 16;
-    tp = 'single';
+elseif strcmp(DataType, 'Eeg')
+    chans = 35;
 else
     return;
 end

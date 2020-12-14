@@ -12,7 +12,7 @@ using namespace VrParser;
 // A single eeg data block contains 3 long-type header and 350 float-type eeg data
 struct EegBlock
 {
-    long head[3];
+    int32_t head[3];
     float data[350];
     enum {HEADNUM = 3, HEADSIZE = 12,
             DATANUM = 350, DATASIZE = 1400};
@@ -28,12 +28,11 @@ DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFi
         return -1;
     }
     if (!ifs) {
-        cout << "eeg binary cannot open" << endl;
         return -2;
     }
     EegBlock b;
-    size_t readSize = sizeof(b);
-    size_t writeSize = readSize - EEGHEADSIZE;
+    size_t readSize = EegBlock::HEADSIZE + EegBlock::DATASIZE;
+    size_t writeSize = EegBlock::DATASIZE;
     while (ifs && ofs) {
         ifs.read((char*)&b, readSize);
         if (!ifs) {
