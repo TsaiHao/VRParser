@@ -4,11 +4,11 @@
 ## 结构
 ### `parser`
 此文件夹下存放库的核心功能。
-### `include`
+#### `include`
 此文件夹包含`dllmain.h`头文件，`parser`库所有对外暴露函数签名都声明于此。在matlab中直接引用libparser需要输入此头文件。
-### `source`
+#### `source`
 此文件夹包含两部分，一部分`utils`文件夹包含库的一些辅助功能的纯C++实现。另外一部分是`dllmain`的代码的实现。
-### `wrapper`
+#### `wrapper`
 此文件夹主要包含库的对其他语言的接口的包装，以及一些实例代码。
 
 `matlab`文件夹包含用于matlab的接口，文件夹中的文件主要是纯matlab实现的功能，在`functions`中包含Matlab Mex封装的类接口，其功能都在文件名中有体现，编译这些代码的方式如下，以`GetMarkers.cpp`为例：
