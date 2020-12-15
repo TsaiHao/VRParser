@@ -18,6 +18,15 @@ struct EegBlock
             DATANUM = 350, DATASIZE = 1400};
 };
 
+struct EegMarker
+{
+    unsigned int nSize;
+    unsigned int nPosition;
+    unsigned int nPoints;
+    int32_t nChannel;
+    char sTypeDesc[1];
+};
+
 // TODO: change to one time read
 DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFile)
 {
@@ -38,7 +47,14 @@ DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFi
         if (!ifs) {
             break;
         }
-        ofs.write((char*)b.data, writeSize);
+        ofs.write((char*)(b.data), writeSize);
+        if (b.head[2] != 0) {
+            EegMarker marker;
+            for (int i = 0; i < b.head[2] && ifs; ++i) {
+                ifs.read((char*)(&marker.nSize), 4);
+                ifs.seekg(marker.nSize - 4, ios::cur);
+            }
+        }
     }
     ifs.close();
     ofs.close();
