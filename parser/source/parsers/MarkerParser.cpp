@@ -2,7 +2,7 @@
 #include <regex>
 #include <dllmain.h>
 #include "MarkerParser.h"
-#include "utils.h"
+#include "../utils/utils.h"
 using namespace std;
 
 void VrParser::MarkerParser::parseFile(const std::string &mfile) {
@@ -22,8 +22,11 @@ void VrParser::MarkerParser::parseFile(const std::string &mfile) {
             marker.comment(m[1].str().empty() ? m[2].str() : m[1].str());
             ++i;
             while (i < lines.size() && regex_match(lines[i], m, marker_regex)) {
-                marker.addCounter(m[1].str(), atoi(m[2].str().c_str()));
-                _names.insert(m[1].str());
+                string n = m[1].str();
+                std::transform(n.begin(), n.end(), n.begin(),
+                               [](unsigned char c) {return std::tolower(c);});
+                marker.addCounter(n, atoi(m[2].str().c_str()));
+                _names.insert(n);
                 ++i;
             }
             _markers.push_back(marker);

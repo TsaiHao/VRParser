@@ -46,8 +46,15 @@ namespace VrParser {
         };
 
         MarkerParser() = default;
-
         MarkerParser(const std::string &mfile);
+        MarkerParser(MarkerParser&& rhs) {
+            _names = std::move(rhs._names);
+            _markers = std::move(rhs._markers);
+        }
+        MarkerParser& operator=(MarkerParser&& rhs) {
+            _names = std::move(rhs._names);
+            _markers = std::move(rhs._markers);
+        }
         void generateMatlabClass(const std::string &fname);
         void parseFile(const std::string &mfile);
         void removeUncommonMarkers();

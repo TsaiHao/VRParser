@@ -4,28 +4,11 @@
 #include <unordered_map>
 #include "dllmain.h"
 #include "utils/utils.h"
+#include "parsers/EegParser.h"
 #include <filesystem>
 using namespace std;
 using namespace VrParser;
 
-#define EEGHEADSIZE 12
-// A single eeg data block contains 3 long-type header and 350 float-type eeg data
-struct EegBlock
-{
-    int32_t head[3];
-    float data[350];
-    enum {HEADNUM = 3, HEADSIZE = 12,
-            DATANUM = 350, DATASIZE = 1400};
-};
-
-struct EegMarker
-{
-    unsigned int nSize;
-    unsigned int nPosition;
-    unsigned int nPoints;
-    int32_t nChannel;
-    char sTypeDesc[1];
-};
 
 // TODO: change to one time read
 DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFile)
@@ -48,9 +31,9 @@ DLLEXPORT int DLLFUNEXP vrEegToBrainVision(const char* inFile, const char* outFi
             break;
         }
         ofs.write((char*)(b.data), writeSize);
-        if (b.head[2] != 0) {
+        if (b.nMarker != 0) {
             EegMarker marker;
-            for (int i = 0; i < b.head[2] && ifs; ++i) {
+            for (int i = 0; i < b.nMarker && ifs; ++i) {
                 ifs.read((char*)(&marker.nSize), 4);
                 ifs.seekg(marker.nSize - 4, ios::cur);
             }
@@ -99,7 +82,7 @@ DLLEXPORT int DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* ou
         else if (regex_match(line, m, marker)) {
             markerPos = m[1].str();
             ofs << "Mk" << counter << "=Trigger," << markerName
-                << "\t" << times[markerName] << ',' << markerPos << ",1,0\n";
+                << "\t" << times[markerName] << ',' << markerPos << ",5000,0\n";
             ++counter;
         }
     }

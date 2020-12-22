@@ -23,6 +23,15 @@ namespace VrParser
         int createDirectory(const std::string& file) const;
         int readFileToBuffer(const std::string& file, std::string& content) const;
         std::vector<std::string> readFileLines(const std::string& file) const;
+        std::string join(const std::string p1, const std::string p2) const {
+            if (p1.empty() || p2.empty()) {
+                return p1.empty() ? p2 : p1;
+            }
+            if (p1.back() == '\\' || p1.back() == '/') {
+                return p1 + p2;
+            }
+            return p1 + "/" + p2;
+        }
 
     private:
         Utils() = default;

@@ -4,7 +4,7 @@
 #include "mex.hpp"
 #include "mexAdapter.hpp"
 
-#include "utils/MarkerParser.h"
+#include "parsers/MarkerParser.h"
 #include "VrMexBase.h"
 #define MAXBUFFERSIZE (1000)
 
