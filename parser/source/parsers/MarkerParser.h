@@ -55,10 +55,12 @@ namespace VrParser {
             _names = std::move(rhs._names);
             _markers = std::move(rhs._markers);
         }
+
         void generateMatlabClass(const std::string &fname);
         void parseFile(const std::string &mfile);
         void removeUncommonMarkers();
-        const std::vector<Marker>& Markers() const {
+
+        std::vector<Marker>& Markers() {
             return _markers;
         }
         const std::unordered_set<std::string>& Names() const {

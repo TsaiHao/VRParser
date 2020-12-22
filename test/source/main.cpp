@@ -7,8 +7,7 @@
 #include <filesystem>
 #include "dllmain.h"
 #include "parsers/EegParser.h"
-#include "Experiment/Experiment.h"
-#include "Experiment/VibrationExperiment.h"
+#include "experiment/VibrationExperiment.h"
 using namespace std;
 using namespace VrParser;
 namespace fs = std::filesystem;
@@ -16,8 +15,8 @@ int main()
 {
     const char* root = "/home/zaijun/Research/vr/data/";
     const char* path = "/home/zaijun/Research/vr/data/7/off/1";
-    //VibrationExperiment exp(root, 7, 1, "on");
-    //exp.splitEegByMarkers("/home/zaijun/Research/vr/eeg");
-    vrEegConvertAllInFolder(path, "/home/zaijun/Research/vr/temp1");
+    VibrationExperiment exp(root, 7, 1, "on");
+    exp.initialize();
+    exp.transcodeForEeglab("/home/zaijun/Research/vr/temp2");
     return 0;
 }

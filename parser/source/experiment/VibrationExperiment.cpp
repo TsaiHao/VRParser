@@ -1,5 +1,7 @@
 #include <fstream>
 #include <filesystem>
+#include <iostream>
+#include "dllmain.h"
 #include "utils/utils.h"
 #include "VibrationExperiment.h"
 #include "parsers/ParserFactory.h"
@@ -68,6 +70,16 @@ void VrParser::VibrationExperiment::_init(const filesystem::path &dp) {
     }
     if (fs::exists(fs::path(dp) / "marker.txt")) {
         _markers = MarkerParser(fs::path(dp) / "marker.txt");
+        auto& ms = _markers.Markers();
+        for (auto iter = ms.begin(); iter < ms.end();) {
+            if (iter->comment().substr(0, 4) != "Void") {
+                iter = ms.erase(iter);
+            }
+            else {
+                //iter->comment("New Segment");
+                ++iter;
+            }
+        }
     }
     if (fs::exists(fs::path(dp) / "bias.txt")) {
         _parseBias();
@@ -85,4 +97,65 @@ void VrParser::VibrationExperiment::_parseBias() {
         _bias.push_back({x, y});
     }
     ifs.close();
+}
+
+void VrParser::VibrationExperiment::transcodeForEeglab(const std::string outDir) {
+    fs::path root(outDir);
+    auto& utils = Utils::instance();
+    if (!utils->exists(root)) {
+        if (utils->createDirectory(outDir) < 0) {
+            return;
+        }
+    }
+    fs::path dataPath = root / "EegData.eeg";
+    fs::path markerPath = root / "EegMarker.vmrk";
+    fs::path headPath = root / "EegHeader.vhdr";
+    writeEeglabData(dataPath);
+    writeEeglabHeader(headPath);
+    writeEeglabMarker(markerPath);
+}
+
+void VrParser::VibrationExperiment::writeEeglabData(const std::string outFile) {
+    ofstream ofs(outFile, ios::out | ios::binary);
+    if (!ofs) {
+        return;
+    }
+    for (auto& m : _markers.Markers()) {
+        size_t beg = m.getCounter("eeg") + 5000;
+        size_t end = beg + TRAIL_DURATION;
+        float* data = nullptr;
+        int k = _parsers["eeg"]->getDataByColumn(&data, beg, end);
+        if (k < 0) {
+            cerr << "Read data error" << endl;
+            return;
+        }
+        else {
+            ofs.write((char*)data, k * 4);
+        }
+    }
+    ofs.close();
+}
+
+void VrParser::VibrationExperiment::writeEeglabMarker(const std::string outFile) {
+    ofstream ofs(outFile);
+    if (!ofs) {
+        return;
+    }
+    ofs << "[Common Infos]\n"
+           "DataFile=EegData.eeg" << endl;
+    ofs << "[Marker Infos]\n";
+    char fmt[] = "Mk%d=New Segment,%s,%d,%d,0\n";
+    string buffer(1000, '\0');
+    int i = 0;
+    for (auto& m : _markers.Markers()) {
+        int k = snprintf(&(buffer[0]), buffer.size(), fmt,
+                 i + 1, m.comment().c_str(), i * TRAIL_DURATION + 1, TRAIL_DURATION);
+        ofs.write(buffer.c_str(), k);
+        ++i;
+    }
+    ofs.close();
+}
+
+void VrParser::VibrationExperiment::writeEeglabHeader(const std::string outFile) {
+    vrEegWriteBrainVisionHeader(outFile.c_str());
 }

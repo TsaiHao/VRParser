@@ -1,6 +1,7 @@
 #ifndef VRPARSER_VIBRATIONEXPERIMENT_H
 #define VRPARSER_VIBRATIONEXPERIMENT_H
 #include "Experiment.h"
+#define TRAIL_DURATION (10000)
 
 namespace VrParser {
     class VibrationExperiment: public Experiment {
@@ -13,7 +14,10 @@ namespace VrParser {
         const std::string getDataPath() const override;
         void initialize() override;
         void splitEegByMarkers(const std::string outDir);
-
+        void transcodeForEeglab(const std::string outDir);
+        void writeEeglabData(const std::string outFile);
+        void writeEeglabMarker(const std::string outFile);
+        void writeEeglabHeader(const std::string outFile);
         std::string& vib() {
             return _vib;
         }

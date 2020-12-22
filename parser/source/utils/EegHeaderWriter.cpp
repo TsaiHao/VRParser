@@ -17,6 +17,7 @@ DataOrientation=MULTIPLEXED
 NumberOfChannels=35
 ; Sampling interval in microseconds
 SamplingInterval=2000
+segmentationtype=markerbased
 
 [Binary Infos]
 BinaryFormat=IEEE_FLOAT_32
