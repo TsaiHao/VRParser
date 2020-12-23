@@ -1,16 +1,18 @@
 #include <fstream>
 #include "dllmain.h"
+#include "utils/utils.h"
+
 using namespace std;
 
-DLLEXPORT int DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile)
+std::string VrParser::Utils::getBrainVisionHeader(const std::string& dataFile, const std::string& markerFile) const
 {
     const char* text = R"(Brain Vision Data Exchange Header File Version 1.0
 ; Data created by the Vision Recorder
 
 [Common Infos]
 Codepage=UTF-8
-DataFile=EegData.eeg
-MarkerFile=EegMarker.vmrk
+DataFile=%s
+MarkerFile=%s
 DataFormat=BINARY
 ; Data orientation: MULTIPLEXED=ch1,pt1, ch2,pt1 ...
 DataOrientation=MULTIPLEXED
@@ -169,12 +171,21 @@ Gnd:          4
 Ref:          0
 
 )";
+string buffer = string(7000, '\0');
+int n = snprintf(&(buffer[0]), 7000, text, dataFile.c_str(), markerFile.c_str());
+buffer.resize(n + 1);
+return buffer;
+}
 
+DLLEXPORT int DLLFUNEXP vrEegWriteBrainVisionHeader(const char* outFile)
+{
+    auto& utils = VrParser::Utils::instance();
     ofstream ofs(outFile);
     if (!ofs) {
         return -1;
     }
-    ofs << text;
+    string s = utils->getBrainVisionHeader("EegData.eeg", "EegMarker.vmrk");
+    ofs << s;
     ofs.close();
     return 1;
 }

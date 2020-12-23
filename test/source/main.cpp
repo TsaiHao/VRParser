@@ -13,10 +13,21 @@ using namespace VrParser;
 namespace fs = std::filesystem;
 int main()
 {
-    const char* root = "/home/zaijun/Research/vr/data/";
-    const char* path = "/home/zaijun/Research/vr/data/7/off/1";
-    VibrationExperiment exp(root, 7, 1, "on");
-    exp.initialize();
-    exp.transcodeForEeglab("/home/zaijun/Research/vr/temp2");
+    const char* root = "D:\\Document\\LabWork\\Projects\\vr\\data";
+    const char* outDir = "D:\\Document\\LabWork\\Projects\\vr\\converted";
+
+    vector<int> subs{ 2, 3, 4 };
+    vector<string> vibs{ "on", "off" };
+    vector<int> tris{ 0, 1, 2 };
+    for (auto s : subs) {
+        for (auto v : vibs) {
+            for (auto t : tris) {
+                VibrationExperiment ve(root, s, t, v);
+                ve.initialize();
+                ve.transcodeForSingleTrial(outDir);
+            }
+        }
+    }
+
     return 0;
 }

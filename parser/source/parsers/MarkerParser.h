@@ -54,6 +54,7 @@ namespace VrParser {
         MarkerParser& operator=(MarkerParser&& rhs) {
             _names = std::move(rhs._names);
             _markers = std::move(rhs._markers);
+            return *this;
         }
 
         void generateMatlabClass(const std::string &fname);

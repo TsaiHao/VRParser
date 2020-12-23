@@ -1,6 +1,7 @@
 #ifndef VRPARSER_PARSERBASE_H
 #define VRPARSER_PARSERBASE_H
 
+#include <string>
 #include <memory>
 
 namespace VrParser {

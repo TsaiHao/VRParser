@@ -82,7 +82,7 @@ DLLEXPORT int DLLFUNEXP vrMarkerToBrainVision(const char* inFile, const char* ou
         else if (regex_match(line, m, marker)) {
             markerPos = m[1].str();
             ofs << "Mk" << counter << "=Trigger," << markerName
-                << "\t" << times[markerName] << ',' << markerPos << ",5000,0\n";
+                << " " << times[markerName] << ',' << markerPos << ",5000,0\n";
             ++counter;
         }
     }

@@ -1,7 +1,17 @@
 #ifndef VRPARSER_VIBRATIONEXPERIMENT_H
 #define VRPARSER_VIBRATIONEXPERIMENT_H
 #include "Experiment.h"
+
+#include <fstream>
+#include <filesystem>
+#include <iostream>
+#include "dllmain.h"
+#include "utils/utils.h"
+
+#include "parsers/ParserFactory.h"
 #define TRAIL_DURATION (10000)
+using namespace std;
+namespace fs = std::filesystem;
 
 namespace VrParser {
     class VibrationExperiment: public Experiment {
@@ -11,13 +21,38 @@ namespace VrParser {
             _vib(v)
         {}
 
-        const std::string getDataPath() const override;
-        void initialize() override;
-        void splitEegByMarkers(const std::string outDir);
+        const std::string getDataPath() const override {
+            if (_vib.empty()) {
+                return "";
+            }
+            return (_rootPath / std::to_string(_subject) / _vib / std::to_string(_trail)).string();
+        }
+        void initialize() override {
+            const std::string dp = getDataPath();
+            if (!dp.empty()) {
+                _init(dp);
+            }
+        }
+
+        void splitEegByMarkers(const std::string outDir, bool addHeader);
+
+        // Eeglab related
         void transcodeForEeglab(const std::string outDir);
         void writeEeglabData(const std::string outFile);
         void writeEeglabMarker(const std::string outFile);
         void writeEeglabHeader(const std::string outFile);
+
+        // FieldTrip related
+        void transcodeForFiledTrip(const std::string& outDir);
+        void writeFtData(const std::string& outFile);
+        void writeFtMarker(const std::string& outFile);
+        void writeFtHeader(const std::string& outFile);
+
+        // Single trail
+        void transcodeForSingleTrial(const std::string& outDir);
+        void writeSingleData(const std::string& outDir);
+        void writeSingleHeader(const std::string& outFile, const std::string& dataFile);
+
         std::string& vib() {
             return _vib;
         }
@@ -32,4 +67,5 @@ namespace VrParser {
         void _parseBias();
     };
 }
+
 #endif //VRPARSER_VIBRATIONEXPERIMENT_H
