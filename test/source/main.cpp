@@ -16,7 +16,7 @@ int main()
     const char* root = "D:\\Document\\LabWork\\Projects\\vr\\data";
     const char* outDir = "D:\\Document\\LabWork\\Projects\\vr\\converted";
 
-    vector<int> subs{ 2, 3, 4 };
+    vector<int> subs{ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
     vector<string> vibs{ "on", "off" };
     vector<int> tris{ 0, 1, 2 };
     for (auto s : subs) {

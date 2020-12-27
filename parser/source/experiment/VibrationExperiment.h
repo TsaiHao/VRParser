@@ -14,7 +14,7 @@ using namespace std;
 namespace fs = std::filesystem;
 
 namespace VrParser {
-    class VibrationExperiment: public Experiment {
+    class DLLEXPORT VibrationExperiment: public Experiment {
     public:
         VibrationExperiment(const std::string& root, const int s, const int t, const std::string& v) :
             Experiment(root, s, t),

@@ -3,9 +3,10 @@
 
 #include <string>
 #include <memory>
+#include "dllmain.h"
 
 namespace VrParser {
-    class ParserBase {
+    class DLLEXPORT ParserBase {
     public:
         ParserBase():
                 _floatData(nullptr),

@@ -35,7 +35,7 @@ namespace VrParser {
         }
     };
 
-    class Experiment {
+    class DLLEXPORT Experiment {
     public:
         explicit Experiment();
         Experiment(const std::string& rootPath, const int s, const int t) :

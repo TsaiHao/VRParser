@@ -25,9 +25,9 @@ void VrParser::VibrationExperiment::splitEegByMarkers(const std::string outDir, 
     auto& parser = _parsers["eeg"];
     int i = 0;
     char fmt[] = "eeg_%02d_%s_%02d_%s";
-    string buffer(100, '\0');
     for (auto& marker : _markers.Markers()) {
         if (marker.comment().substr(0, 4) == "Void") {
+            string buffer(100, '\0');
             size_t beg = marker.getCounter("eeg") + 200;
             size_t end = beg + TRAIL_DURATION;
             float* data = nullptr;
@@ -35,18 +35,22 @@ void VrParser::VibrationExperiment::splitEegByMarkers(const std::string outDir, 
             if (k <= 0) {
                 continue;
             }
-            snprintf(&(buffer[0]), buffer.size(), fmt,
+            int n = snprintf(&(buffer[0]), buffer.size(), fmt,
                      subject(), vib().c_str(), trail(), _bias[i++].toString().c_str());
-            auto dataFile = out / buffer;
-            const string headerFile = dataFile.generic_string() + ".vhdr";
-            ofstream ofs(dataFile);
+            buffer.resize(n);
+            auto file = out / buffer;
+            auto dataFile = file;
+            dataFile += ".eeg";
+            auto headerFile = file;
+            headerFile += ".vhdr";
+            ofstream ofs(dataFile, ios::binary | ios::out);
             if (!ofs) {
                 continue;
             }
             ofs.write((char*)data, k * 4);
             ofs.close();
             if (addHeader) {
-                auto cont = Utils::instance()->getBrainVisionHeader(dataFile.string(), " ");
+                auto cont = Utils::instance()->getBrainVisionHeader(dataFile.filename().string(), "marker.txt");
                 ofstream ofs(headerFile);
                 ofs << cont;
                 ofs.close();

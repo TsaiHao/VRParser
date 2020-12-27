@@ -6,11 +6,12 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include "dllmain.h"
 
 namespace VrParser {
     class MarkerParser {
     public:
-        struct Marker {
+        struct DLLEXPORT Marker {
         public:
             bool hasName(const std::string &name) const {
                 return (_ms.find(name) != _ms.end());

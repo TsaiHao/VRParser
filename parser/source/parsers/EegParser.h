@@ -30,7 +30,7 @@ namespace VrParser {
         char sTypeDesc[1000];
     };
 
-    class EegParser : public ParserBase {
+    class DLLEXPORT EegParser : public ParserBase {
     public:
         EegParser() : _capacity(0) {
             _floatData = nullptr;
