@@ -46,7 +46,8 @@ namespace VrParser {
         void transcodeForFiledTrip(const std::string& outDir);
         void writeFtData(const std::string& outFile);
         void writeFtMarker(const std::string& outFile);
-        void writeFtHeader(const std::string& outFile);
+        void writeFtHeader(const std::string &outFile, const std::string &dataName,
+                           const std::string &markerName);
 
         // Single trail
         void transcodeForSingleTrial(const std::string& outDir);

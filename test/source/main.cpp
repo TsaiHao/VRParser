@@ -21,7 +21,7 @@ string getDir(const string& root, const int sub, const string& vib, const int tr
 int main()
 {
     const char* root = "/home/zaijun/Research/vr/data";
-    const char* outDir = "/home/zaijun/Research/vr/transcode";
+    const char* outDir = "/home/zaijun/Research/vr/fieldtrip";
 
     vector<int> subs{ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
     vector<string> vibs{ "on", "off" };
@@ -31,7 +31,9 @@ int main()
             for (int t : tris) {
                 string indir = getDir(root, s, v, t);
                 string outdir = getDir(outDir, s, v, t);
-                vrEegConvertAllInFolder(indir.c_str(), outdir.c_str());
+                VibrationExperiment exp(root, s, t, v);
+                exp.initialize();
+                exp.transcodeForFiledTrip(outdir);
             }
         }
         cout << s << " subject has converted" << endl;

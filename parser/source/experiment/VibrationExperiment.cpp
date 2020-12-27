@@ -161,20 +161,64 @@ void VrParser::VibrationExperiment::writeEeglabHeader(const std::string outFile)
 }
 
 void VrParser::VibrationExperiment::transcodeForFiledTrip(const std::string& outDir) {
-
+    auto& utils = Utils::instance();
+    if (!utils->exists(outDir)) {
+        utils->createDirectory(outDir);
+    }
+    fs::path root(outDir);
+    auto df = root / "eegdata.eeg";
+    auto mf = root / "eegdata.vmrk";
+    auto hf = root / "eegdata.vhdr";
+    writeFtData(df);
+    writeFtHeader(hf, df.filename().string(), mf.filename().string());
+    writeFtMarker(mf);
 }
 
+// fieldtrip needs header file and datafile have same name
 void VrParser::VibrationExperiment::writeFtData(const std::string& outFile) {
-    auto begMarker = _markers.Markers().front();
-
+    ofstream ofs(outFile, ios::out | ios::binary);
+    auto ep = _parsers.find("eeg");
+    if (ep == _parsers.end()) {
+        return;
+    }
+    float* data = nullptr;
+    int n = ep->second->getDataByColumn(&data, 0, ep->second->columns() - 1);
+    if (n <= 0) {
+        return;
+    }
+    ofs.write((char*)data, n * 4);
+    ofs.close();
 }
 
-void VrParser::VibrationExperiment::writeFtMarker(const std::string& outFile)
-{
+void VrParser::VibrationExperiment::writeFtMarker(const std::string& outFile) {
+    ofstream ofs(outFile);
+    if (!ofs) {
+        return;
+    }
+    ofs << "[Common Infos]\n"
+           "DataFile=eegdata.eeg" << endl;
+    ofs << "[Marker Infos]\n";
+    char fmt[] = "Mk%d=New Segment,%s,%d,%d,0\n";
+    string buffer(1000, '\0');
+    int i = 0;
+    for (auto& m : _markers.Markers()) {
+        int k = snprintf(&(buffer[0]), buffer.size(), fmt,
+                         i + 1, m.comment().c_str(), m.getCounter("eeg"), TRAIL_DURATION);
+        ofs.write(buffer.c_str(), k);
+        ++i;
+    }
+    ofs.close();
 }
 
-void VrParser::VibrationExperiment::writeFtHeader(const std::string& outFile)
-{
+void VrParser::VibrationExperiment::writeFtHeader(const std::string &outFile, const std::string &dataName,
+                                                  const std::string &markerName) {
+    ofstream ofs(outFile);
+    if (!ofs) {
+        return;
+    }
+    const string cont = Utils::instance()->getBrainVisionHeader(dataName, markerName);
+    ofs << cont;
+    ofs.close();
 }
 
 void VrParser::VibrationExperiment::transcodeForSingleTrial(const std::string& outDir) {

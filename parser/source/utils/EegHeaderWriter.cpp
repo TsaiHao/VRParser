@@ -173,7 +173,7 @@ Ref:          0
 )";
 string buffer = string(7000, '\0');
 int n = snprintf(&(buffer[0]), 7000, text, dataFile.c_str(), markerFile.c_str());
-buffer.resize(n + 1);
+buffer.resize(n);
 return buffer;
 }
 

@@ -62,6 +62,10 @@ namespace VrParser {
             return _channels;
         }
 
+        const size_t columns() const {
+            return length() / channels();
+        }
+
     protected:
         float* _floatData;
         float _samplingRate;
