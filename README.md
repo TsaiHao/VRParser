@@ -22,6 +22,27 @@ markers = GetMarkers('marker.txt');
 ### `test`
 此文件夹下存放测试`parser`的代码。可选择编译。
 
+## 示例
+下面的代码用于转码VR实验的eeg数据：
+
+```c++
+const char* root = "/home/zaijun/Research/vr/data";
+const char* outDir = "/home/zaijun/Research/vr/transcode";
+
+vector<int> subs{ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+vector<string> vibs{ "on", "off" };
+vector<int> tris{ 0, 1, 2 };
+for (int s : subs) {
+    for (string& v : vibs) {
+        for (int t : tris) {
+            string indir = getDir(root, s, v, t);
+            string outdir = getDir(outDir, s, v, t);
+            vrEegConvertAllInFolder(indir.c_str(), outdir.c_str());
+        }
+    }
+    cout << s << " subject has converted" << endl;
+}
+```
 ## 依赖
 `CMake (minimum 3.16.0)`
 

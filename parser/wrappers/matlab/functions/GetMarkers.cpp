@@ -29,7 +29,7 @@ public:
         auto& markers = parser.Markers();
         auto& names = parser.Names();
         logMessage(to_string(markers.size()) + " markers parserd");
-        char declareFormat[] = "m(%d) = MarkerInfo()";
+        char declareFormat[] = "m(%d) = MarkerInfo();";
         char valueFormat[] = "m(%d).%s = %d;";
         string declareBuffer(MAXBUFFERSIZE, '\0');
         string valueBuffer(MAXBUFFERSIZE, '\0');

@@ -7,6 +7,10 @@ using namespace std;
 
 int VrParser::Utils::createDirectory(const std::string& file) const 
 {
+    filesystem::path pt(file);
+    if (!filesystem::exists(pt.parent_path())) {
+        createDirectory(pt.parent_path());
+    }
 	bool res = filesystem::create_directory(file);
 	return res ? 1 : -1;
 }

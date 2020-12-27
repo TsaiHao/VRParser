@@ -11,23 +11,30 @@
 using namespace std;
 using namespace VrParser;
 namespace fs = std::filesystem;
+
+string getDir(const string& root, const int sub, const string& vib, const int tri)
+{
+    fs::path ret = fs::path(root) / to_string(sub) / vib / to_string(tri);
+    return ret.string();
+}
+
 int main()
 {
-    const char* root = "D:\\Document\\LabWork\\Projects\\vr\\data";
-    const char* outDir = "D:\\Document\\LabWork\\Projects\\vr\\converted";
+    const char* root = "/home/zaijun/Research/vr/data";
+    const char* outDir = "/home/zaijun/Research/vr/transcode";
 
     vector<int> subs{ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
     vector<string> vibs{ "on", "off" };
     vector<int> tris{ 0, 1, 2 };
-    for (auto s : subs) {
-        for (auto v : vibs) {
-            for (auto t : tris) {
-                VibrationExperiment ve(root, s, t, v);
-                ve.initialize();
-                ve.transcodeForSingleTrial(outDir);
+    for (int s : subs) {
+        for (string& v : vibs) {
+            for (int t : tris) {
+                string indir = getDir(root, s, v, t);
+                string outdir = getDir(outDir, s, v, t);
+                vrEegConvertAllInFolder(indir.c_str(), outdir.c_str());
             }
         }
+        cout << s << " subject has converted" << endl;
     }
-
     return 0;
 }
