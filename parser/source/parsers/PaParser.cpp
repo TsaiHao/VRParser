@@ -29,7 +29,7 @@ void VrParser::PaParser::parse(const std::string file) {
 }
 
 std::vector<float> PaParser::getPositionByColumn(const size_t beg, const size_t end) const {
-
+    return vector<float>();
 }
 
 std::vector<float> PaParser::getRotationByColumn(const size_t beg, const size_t end, bool euler) const {
@@ -49,7 +49,7 @@ std::vector<float> PaParser::getRotationByColumn(const size_t beg, const size_t 
 
 std::vector<float> PaParser::_pickRotation(const size_t beg, const size_t end) const {
     size_t items = end - beg;
-    vector<float> rots = vector<float>(items);
+    vector<float> rots = vector<float>(items * 4);
     int step = 7;
     for (int i = 0; i < items; ++i) {
         float* col = (beg + i) * step + _floatData;

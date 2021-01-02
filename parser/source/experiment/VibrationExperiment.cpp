@@ -170,9 +170,9 @@ void VrParser::VibrationExperiment::transcodeForFiledTrip(const std::string& out
     auto df = root / "eegdata.eeg";
     auto mf = root / "eegdata.vmrk";
     auto hf = root / "eegdata.vhdr";
-    writeFtData(df);
-    writeFtHeader(hf, df.filename().string(), mf.filename().string());
-    writeFtMarker(mf);
+    writeFtData(df.string());
+    writeFtHeader(hf.string(), df.filename().string(), mf.filename().string());
+    writeFtMarker(mf.string());
 }
 
 // fieldtrip needs header file and datafile have same name
@@ -257,7 +257,7 @@ void VrParser::VibrationExperiment::splitPaByMarkers(const string &outDir) {
 
     for (auto& m : _markers.Markers()) {
         size_t beg = m.getCounter("position");
-        vector<float> es = p->getRotationByColumn(beg, beg + LENGTH * p->samplingRate());
+        vector<float> es = p->getRotationByColumn(beg, beg + LENGTH * p->samplingRate(), false);
         snprintf(buffer, 1000, fmt,
                  subject(), vib().c_str(), trail(), bias()[i].toString().c_str());
         auto fn = outDir / fs::path(buffer);

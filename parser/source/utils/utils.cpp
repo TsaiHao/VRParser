@@ -9,7 +9,7 @@ int VrParser::Utils::createDirectory(const std::string& file) const
 {
     filesystem::path pt(file);
     if (!filesystem::exists(pt.parent_path())) {
-        createDirectory(pt.parent_path());
+        createDirectory(pt.parent_path().string());
     }
 	bool res = filesystem::create_directory(file);
 	return res ? 1 : -1;
@@ -62,12 +62,12 @@ VrParser::Utils::quaternionToEuler(const float *const quats, const size_t items,
     if (items < 0) {
         return std::vector<float>();
     }
-    float* eulers = new float[items * 3];
+    float eulers[3];
+    vector<float> data(items * 3);
     for (int i = 0; i < items; ++i) {
         const float* const beg = quats + i * step + padding;
-        _quatToEulerIntern(beg, eulers + 3 * i);
+        _quatToEulerIntern(beg, eulers);
+        copy(eulers, eulers + 3, data.begin() + i * 3);
     }
-    auto ret = std::vector<float>(eulers, eulers + items * 4);
-    delete[] eulers;
-    return ret;
+    return data;
 }
