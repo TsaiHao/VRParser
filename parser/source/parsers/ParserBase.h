@@ -5,6 +5,7 @@
 #include <memory>
 #include "dllmain.h"
 
+//TODO: add parser list
 namespace VrParser {
     class DLLEXPORT ParserBase {
     public:
@@ -22,7 +23,7 @@ namespace VrParser {
         }
 
         // time is in seconds;
-        int getDataByTime(float** data, const float beg, const float end) const {
+        virtual int getDataByTime(float** data, const float beg, const float end) const {
             if (_floatData == nullptr) {
                 return 0;
             }
@@ -35,7 +36,7 @@ namespace VrParser {
             return right - left;
         }
 
-        int getDataByColumn(float** data, const size_t beg, const size_t end) const {
+        virtual int getDataByColumn(float** data, const size_t beg, const size_t end) const {
             if (_floatData == nullptr) {
                 return 0;
             }
@@ -67,6 +68,13 @@ namespace VrParser {
         }
 
     protected:
+        ParserBase(float* const data, const float sr,
+                   const size_t lg, const size_t chan):
+                   _floatData(data),
+                   _samplingRate(sr),
+                   _length(lg),
+                   _channels(chan)
+        { }
         float* _floatData;
         float _samplingRate;
         size_t _length;

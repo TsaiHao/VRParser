@@ -7,8 +7,10 @@
 #include "parsers/ParserFactory.h"
 
 using namespace std;
+using namespace VrParser;
 namespace fs = std::filesystem;
 
+static auto& utils = Utils::instance();
 
 void VrParser::VibrationExperiment::splitEegByMarkers(const std::string outDir, bool addHeader = false) {
     auto& util = Utils::instance();
@@ -161,7 +163,6 @@ void VrParser::VibrationExperiment::writeEeglabHeader(const std::string outFile)
 }
 
 void VrParser::VibrationExperiment::transcodeForFiledTrip(const std::string& outDir) {
-    auto& utils = Utils::instance();
     if (!utils->exists(outDir)) {
         utils->createDirectory(outDir);
     }
@@ -235,4 +236,36 @@ void VrParser::VibrationExperiment::writeSingleData(const std::string& outDir) {
 
 void VrParser::VibrationExperiment::writeSingleHeader(const std::string& outFile, const std::string& dataFile) {
 
+}
+
+void VrParser::VibrationExperiment::splitPaByMarkers(const string &outDir) {
+    if (_parsers.find("pa") == _parsers.end()) {
+        return;
+    }
+    auto& ps = _parsers["pa"];
+    auto p = dynamic_cast<PaParser*>(ps.get());
+    if (p == nullptr) {
+        return;
+    }
+    if (!utils->exists(outDir)) {
+        utils->createDirectory(outDir);
+    }
+    const char* fmt = "pa_%02d_%s_%02d_%s";
+    char buffer[1000];
+    const int LENGTH = 30;
+    int i = 0;
+
+    for (auto& m : _markers.Markers()) {
+        size_t beg = m.getCounter("position");
+        vector<float> es = p->getRotationByColumn(beg, beg + LENGTH * p->samplingRate());
+        snprintf(buffer, 1000, fmt,
+                 subject(), vib().c_str(), trail(), bias()[i].toString().c_str());
+        auto fn = outDir / fs::path(buffer);
+        ofstream ofs(fn, ios::out | ios::binary);
+        if (!ofs) {
+            return;
+        }
+        ofs.write((char*)es.data(), es.size() * 4);
+        ++i;
+    }
 }

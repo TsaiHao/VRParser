@@ -21,7 +21,7 @@ string getDir(const string& root, const int sub, const string& vib, const int tr
 int main()
 {
     const char* root = "/home/zaijun/Research/vr/data";
-    const char* outDir = "/home/zaijun/Research/vr/fieldtrip";
+    const char* outDir = "/home/zaijun/Research/vr/pas";
 
     vector<int> subs{ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
     vector<string> vibs{ "on", "off" };
@@ -33,7 +33,7 @@ int main()
                 string outdir = getDir(outDir, s, v, t);
                 VibrationExperiment exp(root, s, t, v);
                 exp.initialize();
-                exp.transcodeForFiledTrip(outdir);
+                exp.splitPaByMarkers(outDir);
             }
         }
         cout << s << " subject has converted" << endl;

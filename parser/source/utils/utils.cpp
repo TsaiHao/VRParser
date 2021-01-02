@@ -31,7 +31,7 @@ int VrParser::Utils::readFileToBuffer(const string &file, string& content) const
     }
 
     ifs.seekg(0, ios::beg);
-    content = string(size, '\0');
+    content.resize(size);
     ifs.read(&content[0], size);
     ifs.close();
     return size;
@@ -41,7 +41,6 @@ std::vector<std::string> VrParser::Utils::readFileLines(const string &file) cons
     ifstream ifs(file);
     vector<string> lines;
     if (!ifs) {
-        ifs.close();
         return lines;
     }
 
@@ -53,3 +52,22 @@ std::vector<std::string> VrParser::Utils::readFileLines(const string &file) cons
     return lines;
 }
 
+std::vector<float> VrParser::Utils::quaternionToEuler(const vector<float> &quats) const noexcept {
+    return quaternionToEuler(quats.data(), quats.size() / 4, 0);
+}
+
+std::vector<float>
+VrParser::Utils::quaternionToEuler(const float *const quats, const size_t items, const size_t padding) const noexcept {
+    size_t step = padding + 4;
+    if (items < 0) {
+        return std::vector<float>();
+    }
+    float* eulers = new float[items * 3];
+    for (int i = 0; i < items; ++i) {
+        const float* const beg = quats + i * step + padding;
+        _quatToEulerIntern(beg, eulers + 3 * i);
+    }
+    auto ret = std::vector<float>(eulers, eulers + items * 4);
+    delete[] eulers;
+    return ret;
+}

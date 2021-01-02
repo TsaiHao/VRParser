@@ -19,8 +19,13 @@ Experiment::Experiment() {
 }
 
 const std::string Experiment::classify(const fs::path& p) const {
-    if (p.stem() == "eeg") {
+    auto stem = p.stem();
+    auto ext = p.extension();
+    if (stem == "eeg") {
         return "eeg";
+    }
+    else if (stem == "position") {
+        return "pa";
     }
 
     return "";

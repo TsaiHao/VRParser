@@ -11,6 +11,9 @@ unique_ptr<ParserBase> VrParser::GetParser(const string name)
     }
     else if (name == "emg") {
     }
+    else if (name == "pa") {
+        ptr = std::make_unique<PaParser>();
+    }
 
     return ptr;
 }
