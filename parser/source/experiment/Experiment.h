@@ -6,6 +6,7 @@
 #include "parsers/MarkerParser.h"
 #include "utils/utils.h"
 #include "parsers/ParserBase.h"
+#include <set>
 
 namespace VrParser {
     template <typename T>
@@ -40,7 +41,7 @@ namespace VrParser {
         explicit Experiment();
         Experiment(const std::string& rootPath, const int s, const int t) :
             _rootPath(rootPath), _subject(s), _trail(t) {}
-        virtual void initialize() = 0;
+        virtual void initialize(const std::set<std::string>&) = 0;
         virtual ~Experiment() {}
         int& subject() {
             return _subject;

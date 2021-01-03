@@ -27,10 +27,10 @@ namespace VrParser {
             }
             return (_rootPath / std::to_string(_subject) / _vib / std::to_string(_trail)).string();
         }
-        void initialize() override {
+        void initialize(const std::set<std::string>& parserList) override {
             const std::string dp = getDataPath();
             if (!dp.empty()) {
-                _init(dp);
+                _init(dp, parserList);
             }
         }
 
@@ -65,7 +65,8 @@ namespace VrParser {
     private:
         std::string _vib;
         std::vector<Bias> _bias;
-        void _init(const std::filesystem::path& dp);
+        std::vector<MarkerParser::Marker> _visualMarkers;
+        void _init(const std::filesystem::path& dp, const std::set<std::string>& parserList);
         void _parseBias();
     };
 }

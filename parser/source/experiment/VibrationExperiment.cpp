@@ -61,11 +61,17 @@ void VrParser::VibrationExperiment::splitEegByMarkers(const std::string outDir, 
     }
 }
 
-void VrParser::VibrationExperiment::_init(const filesystem::path& dp) {
+void VrParser::VibrationExperiment::_init(const filesystem::path& dp, const set<string>& parserList) {
+    if (parserList.empty()) {
+        return;
+    }
+    const string all = "all";
     for (const auto& entry : fs::directory_iterator(dp)) {
         fs::path p(entry);
         string name = classify(p.filename());
-        if (!name.empty()) {
+        if (!name.empty() &&
+            (parserList.find(all) != parserList.end()
+            || parserList.find(name) != parserList.end())) {
             _parsers[name] = GetParser(name);
             _parsers[name]->parse(p.string());
         }

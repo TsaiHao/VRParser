@@ -5,7 +5,6 @@
 #include <memory>
 #include "dllmain.h"
 
-//TODO: add parser list
 namespace VrParser {
     class DLLEXPORT ParserBase {
     public:
