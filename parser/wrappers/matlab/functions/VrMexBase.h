@@ -19,7 +19,7 @@ protected:
         return CharArray(pwd[0]).toAscii();
     }
 
-    matlab::data::String getCommandFromString(std::string& str) const {
+    matlab::data::String getCommandFromString(const std::string& str) const {
         return matlab::engine::convertUTF8StringToUTF16String(str);
     }
 

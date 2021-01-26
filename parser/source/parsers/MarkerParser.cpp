@@ -21,12 +21,14 @@ void VrParser::MarkerParser::parseFile(const std::string &mfile) {
             marker.clear();
             marker.comment(m[1].str().empty() ? m[2].str() : m[1].str());
             ++i;
-            while (i < lines.size() && regex_match(lines[i], m, marker_regex)) {
-                string n = m[1].str();
-                std::transform(n.begin(), n.end(), n.begin(),
-                               [](unsigned char c) {return std::tolower(c);});
-                marker.addCounter(n, atoi(m[2].str().c_str()));
-                _names.insert(n);
+            while (i < lines.size() && !regex_match(lines[i], m, name_regex)) {
+                if (regex_match(lines[i], m, marker_regex)) {
+                    string n = m[1].str();
+                    std::transform(n.begin(), n.end(), n.begin(),
+                        [](unsigned char c) { return std::tolower(c); });
+                    marker.addCounter(n, atoi(m[2].str().c_str()));
+                    _names.insert(n);
+                }
                 ++i;
             }
             _markers.push_back(marker);

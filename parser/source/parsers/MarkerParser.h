@@ -9,7 +9,7 @@
 #include "dllmain.h"
 
 namespace VrParser {
-    class MarkerParser {
+    class DLLEXPORT MarkerParser {
     public:
         struct DLLEXPORT Marker {
         public:

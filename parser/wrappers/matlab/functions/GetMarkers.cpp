@@ -1,6 +1,6 @@
 #include <vector>
 #include <string>
-
+#include <fstream>
 #include "mex.hpp"
 #include "mexAdapter.hpp"
 
@@ -20,8 +20,15 @@ public:
         }
         CharArray input(inputs[0]);
         string file = input.toAscii();
+
+        if (file.empty()) {
+            logError("file name is empty\n");
+            return;
+        }
         VrParser::MarkerParser parser(file);
+        
         parser.removeUncommonMarkers();
+        logMessage(file + " is parsing");
         string pwd = getPwd();
         string clsFile = pwd + "/MarkerInfo.m";
         parser.generateMatlabClass(clsFile);
@@ -33,6 +40,7 @@ public:
         char valueFormat[] = "m(%d).%s = %d;";
         string declareBuffer(MAXBUFFERSIZE, '\0');
         string valueBuffer(MAXBUFFERSIZE, '\0');
+        matlabPtr->eval(getCommandFromString("clear m"));
         for (int i = 0; i < markers.size(); ++i) {
             snprintf(&(declareBuffer[0]), MAXBUFFERSIZE, declareFormat, i + 1);
             matlabPtr->eval(getCommandFromString(declareBuffer));

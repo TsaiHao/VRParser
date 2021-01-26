@@ -38,7 +38,13 @@ int VrParser::Utils::readFileToBuffer(const string &file, string& content) const
 }
 
 std::vector<std::string> VrParser::Utils::readFileLines(const string &file) const {
-    ifstream ifs(file);
+    ifstream ifs;
+    try {
+        ifs.open(file);
+    }
+    catch (exception& e) {
+        return {};
+    }
     vector<string> lines;
     if (!ifs) {
         return lines;
