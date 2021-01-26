@@ -17,6 +17,8 @@ elseif strcmp(DataType, 'emg')
     chans = 16;
 elseif strcmp(DataType, 'eeg')
     chans = 35;
+elseif strcmp(DataType, 'pa')
+    chans = 7;
 else
     error('data type is not defined')
 end
