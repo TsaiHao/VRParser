@@ -10,6 +10,7 @@ unique_ptr<ParserBase> VrParser::GetParser(const string name)
         ptr = std::make_unique<EegParser>();
     }
     else if (name == "emg") {
+        ptr = std::make_unique<EmgParser>();
     }
     else if (name == "pa") {
         ptr = std::make_unique<PaParser>();

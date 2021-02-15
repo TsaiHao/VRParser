@@ -27,6 +27,9 @@ const std::string Experiment::classify(const fs::path& p) const {
     else if (stem == "position") {
         return "pa";
     }
+    else if (stem == "emg") {
+        return "emg";
+    }
 
     return "";
 }

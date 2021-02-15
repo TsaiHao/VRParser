@@ -36,6 +36,7 @@ namespace VrParser {
 
         void splitEegByMarkers(const std::string outDir, bool addHeader);
         void splitPaByMarkers(const std::string& outDir);
+        void splitEmgByMarkers(const std::string& outDir);
 
         // Eeglab related
         void transcodeForEeglab(const std::string outDir);
@@ -50,10 +51,11 @@ namespace VrParser {
         void writeFtHeader(const std::string &outFile, const std::string &dataName,
                            const std::string &markerName);
 
-        // Single trail
+        // Single trial
         void transcodeForSingleTrial(const std::string& outDir);
         void writeSingleData(const std::string& outDir);
         void writeSingleHeader(const std::string& outFile, const std::string& dataFile);
+
 
         std::string& vib() {
             return _vib;
