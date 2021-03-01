@@ -47,10 +47,9 @@ namespace VrParser
             std::cerr << msg << std::endl;
         }
 
-        // calculate related
+        // calculation related
         std::vector<float> quaternionToEuler(const std::vector<float>& quats) const noexcept;
         std::vector<float> quaternionToEuler(const float *const quats, const size_t items, const size_t padding) const noexcept;
-
     private:
         Utils() = default;
         void _quatToEulerIntern(const float* const q, float* const e) const noexcept {

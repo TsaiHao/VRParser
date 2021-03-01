@@ -306,3 +306,34 @@ void VibrationExperiment::splitEmgByMarkers(const string &outDir) {
         ++i;
     }
 }
+
+void VibrationExperiment::splitFtByMarkers(const string &outDir) {
+    if (_parsers.find("ft") == _parsers.end()) {
+        return;
+    }
+
+    auto& parser = _parsers["ft"];
+    if (!utils->exists(outDir)) {
+        utils->createDirectory(outDir);
+    }
+    char buffer[1000];
+    const int LENGTH = 20;
+    const char *fmt = "ft_thumb_%02d_%s_%02d_%s";
+    int i = 0;
+
+    for (auto &m : _markers.Markers()) {
+        size_t beg = m.getCounter("ft");
+        float* data = nullptr;
+        // TODO: offset
+        int n = parser->getDataByColumn(&data, beg + 400, beg + 400 + LENGTH * parser->samplingRate());
+        snprintf(buffer, 1000, fmt,
+                 subject(), vib().c_str(), trail(), bias()[i].toString().c_str());
+        auto fn = outDir / fs::path(buffer);
+        ofstream ofs(fn, ios::out | ios::binary);
+        if (!ofs) {
+            return;
+        }
+        ofs.write((char *) data, 4 * n);
+        ++i;
+    }
+}

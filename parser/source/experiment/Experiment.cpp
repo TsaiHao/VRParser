@@ -30,6 +30,9 @@ const std::string Experiment::classify(const fs::path& p) const {
     else if (stem == "emg") {
         return "emg";
     }
+    else if (stem == "thumb") {
+        return "ft";
+    }
 
     return "";
 }

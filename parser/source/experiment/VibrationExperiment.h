@@ -37,6 +37,7 @@ namespace VrParser {
         void splitEegByMarkers(const std::string outDir, bool addHeader);
         void splitPaByMarkers(const std::string& outDir);
         void splitEmgByMarkers(const std::string& outDir);
+        void splitFtByMarkers(const std::string& outDir);
 
         // Eeglab related
         void transcodeForEeglab(const std::string outDir);
