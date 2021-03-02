@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-
+#include <assert.h>
 #define _USE_MATH_DEFINES
 #include <cmath>
 
@@ -71,5 +71,26 @@ namespace VrParser
             e[2] = std::atan2(siny_cosp, cosy_cosp);
         }
     };
+
+	class Matrix {
+	public:
+		Matrix() = default;
+		Matrix(int r, int c, float initValue = 0) :
+			row(r), col(c), data(r* c, initValue)
+		{ }
+		Matrix(int r, int c, std::vector<float> const& values) :
+			row(r), col(c), data(values)
+		{ }
+
+		void rightMultiply(float* const right, int rows) const;
+
+		void readFromCSV(std::string const& file, std::string const& delimiter, int beginRow, int endRow);
+	private:
+		std::vector<float> data;
+
+		int row = 0;
+		int col = 0;
+	};
+
 }
 #endif //VRPARSER_UTILS_H

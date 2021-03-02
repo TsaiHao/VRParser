@@ -10,7 +10,9 @@ namespace VrParser {
         { }
 
         void parse(const std::string file) override;
-
+        
+    protected:
+        void demean(int meanRows = 100);
     };
 }
 #endif //VRPARSER_FTPARSER_H

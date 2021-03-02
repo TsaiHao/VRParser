@@ -1,5 +1,6 @@
 #include <string>
 #include <filesystem>
+#include <sstream>
 #include <fstream>
 #include "utils.h"
 
@@ -76,4 +77,51 @@ VrParser::Utils::quaternionToEuler(const float *const quats, const size_t items,
         copy(eulers, eulers + 3, data.begin() + i * 3);
     }
     return data;
+}
+
+
+void VrParser::Matrix::rightMultiply(float* const right, int rows) const
+{
+	std::vector<float> temp(row);
+	float* dp = right;
+	for (int r = 0; r < rows; ++r) {
+		for (int i = 0; i < row; ++i) {
+			temp[i] = 0;
+			for (int j = 0; j < col; ++j) {
+				temp[i] += data[i * row + j] * dp[j];
+			}
+		}
+		for (int i = 0; i < row; ++i) {
+			dp[i] = temp[i];
+		}
+        dp += col;
+	}
+}
+
+void VrParser::Matrix::readFromCSV(std::string const& file, std::string const& delimiter, int beginRow, int endRow)
+{
+    auto& utils = Utils::instance();
+    auto lines = utils->readFileLines(file);
+    if (lines.size() < endRow) {
+        return;
+    }
+    row = endRow - beginRow;
+    string del(delimiter.size(), '0');
+    for (int i = beginRow; i < endRow; ++i) {
+        istringstream iss(lines[i]);
+        vector<float> temp;
+        while (iss) {
+            float x;
+            iss >> x;
+            iss.read(&(del[0]), del.size());
+            if (iss) {
+                temp.push_back(x);
+            }
+        }
+        if (col == 0) {
+            col = temp.size();
+            data = vector<float>(col * row);
+        }
+        copy(temp.begin(), temp.end(), data.begin() + i * col);
+    }
 }
