@@ -64,8 +64,6 @@ namespace VrParser {
         const std::vector<Bias>& bias() {
             return _bias;
         }
-
-    private:
         std::string _vib;
         std::vector<Bias> _bias;
         std::vector<MarkerParser::Marker> _visualMarkers;

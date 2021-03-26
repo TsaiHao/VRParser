@@ -54,7 +54,6 @@ namespace VrParser {
         }
         virtual const std::string getDataPath() const = 0;
 
-    protected:
         static std::unordered_map<std::string, int> Channels;
         static std::unordered_map<std::string, int> SampRate;
         std::filesystem::path _rootPath;
